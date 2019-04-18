@@ -1,9 +1,11 @@
 FROM uthng/caddyserver:latest
 MAINTAINER Thanh NGUYEN <u.nguyenthanh@gmail.com>
 
-ENV GIT_SSH_KEY /sshkey/id_rsa
+ENV GIT_SSH_FOLDER /sshkey
 ENV GIT_REPO ""
 ENV GIT_BRANCH master
+ENV GIT_WEBHOOK_URL ""
+ENV GIT_WEBHOOK_SECRET ""_
 
 # Hugo options
 # Download
@@ -22,7 +24,7 @@ RUN curl -jksSL "https://github.com/spf13/hugo/releases/download/v${HUGO_VERSION
 # Prepare sshkey
 RUN mkdir /sshkey
 RUN mkdir ~/.ssh
-RUN echo "Host *\n\tStrictHostKeyChecking no\n\tIdentityFile ${GIT_SSH_KEY}" >> ~/.ssh/config
+#RUN echo "Host *\n\tStrictHostKeyChecking no\n\tIdentityFile ${GIT_SSH_KEY}" >> ~/.ssh/config
 
 # Copy all necessary files
 COPY entrypoint.sh /
@@ -30,5 +32,8 @@ COPY run.sh /
 
 WORKDIR /site
 
+VOLUME ${GIT_SSH_FOLDER}
+
+EXPOSE 443 80
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/run.sh"]

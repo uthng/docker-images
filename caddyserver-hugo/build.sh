@@ -2,7 +2,7 @@
 
 DOCKER_REPO=uthng
 DOCKER_IMAGE=caddyserver-hugo
-DOCKER_TAG=latest
+DOCKER_TAG=0.1.1
 DOCKER_BUILD=false
 DOCKER_PUSH=false
 DOCKER_USER=
@@ -34,7 +34,7 @@ while true ; do
         --user) DOCKER_USER="$2" ; shift 2 ;;
         --pass) DOCKER_PASS="$2" ; shift 2 ;;
         -h | --help) help ; shift ;;
-        \?) echo "Invalid argument !" ; exit 1 ;;
+        \?) echo "Invalid argument !" ; exit 1;;
         --) shift ; break ;;
         *) echo "Error argument !" ; exit 1 ;;
     esac
@@ -52,7 +52,7 @@ if ${DOCKER_PUSH} ; then
         exit 1
     fi
 
-    docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} http://${DOCKER_REPO}
+    docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
     if [ $? -ne 0 ]; then exit 1; fi
 
     if [ "${DOCKER_TAG}" != "latest" ]; then
